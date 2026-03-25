@@ -18,11 +18,15 @@ public class Sale extends Transaction {
 
   /**
    * Creates a Sale transaction.
+   * Automatically creates a SaleCalculator for the given share
+   * and passes it up to the Transaction base class via super().
    *
    * @param share the share being sold
    * @param week  the trading week number
    */
   public Sale(Share share, int week) {
+    // super() calls the Transaction constructor with the share, week,
+    // and a new SaleCalculator built from the same share
     super(share, week, new SaleCalculator(share));
   }
 
@@ -39,15 +43,32 @@ public class Sale extends Transaction {
     if (player == null) {
       throw new IllegalArgumentException("Player cannot be null");
     }
+    // Prevent the same transaction from being committed twice
     if (committed) {
       throw new IllegalStateException("This transaction has already been committed");
     }
+    // Verify the player actually owns this share before attempting the sale.
+    // contains() checks the portfolio for this exact Share object.
+    // The ! at the front means "if the portfolio does NOT contain the share"
     if (!player.getPortfolio().contains(getShare())) {
       throw new IllegalStateException("Player does not own the share being sold");
     }
+
+    // All checks passed - now execute the three steps of the sale:
+
+    // Step 1: Add the sale proceeds to the player's cash balance.
+    // getCalculator() returns the SaleCalculator, calculateTotal() returns
+    // gross minus commission minus tax.
     player.addMoney(getCalculator().calculateTotal());
+
+    // Step 2: Remove the share from the player's portfolio - they no longer own it
     player.getPortfolio().removeShare(getShare());
+
+    // Step 3: Record this transaction in the player's archive.
+    // 'this' refers to this Sale object itself - it archives itself.
     player.getTransactionArchive().add(this);
+
+    // Mark as committed so this transaction cannot be executed again
     committed = true;
   }
 }

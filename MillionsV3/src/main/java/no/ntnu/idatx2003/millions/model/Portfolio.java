@@ -13,12 +13,15 @@ import java.util.List;
  */
 public class Portfolio {
 
+  // The internal list holding all shares the player currently owns.
+  // Each entry is a separate Share object from a single purchase.
   private final List<Share> shares;
 
   /**
    * Creates a new empty Portfolio.
    */
   public Portfolio() {
+    // Start with an empty list - the player owns nothing yet
     this.shares = new ArrayList<>();
   }
 
@@ -33,20 +36,24 @@ public class Portfolio {
     if (share == null) {
       throw new IllegalArgumentException("Share cannot be null");
     }
+    // Delegates to the ArrayList's own add() method, which always returns true
     return shares.add(share);
   }
 
   /**
    * Removes a specific share from the portfolio.
+   * Uses object identity - only removes the exact Share instance passed in.
    *
    * @param share the share to remove
-   * @return true if the share was found and removed
+   * @return true if the share was found and removed, false if it was not in the portfolio
    * @throws IllegalArgumentException if share is null
    */
   public boolean removeShare(Share share) {
     if (share == null) {
       throw new IllegalArgumentException("Share cannot be null");
     }
+    // List.remove() returns true if the item was found and removed,
+    // false if it was not present in the list
     return shares.remove(share);
   }
 
@@ -56,6 +63,10 @@ public class Portfolio {
    * @return unmodifiable list of all shares
    */
   public List<Share> getShares() {
+    // unmodifiableList() wraps the list so the caller can read it
+    // but cannot add or remove items directly.
+    // The only way to change the portfolio is through addShare() and removeShare(),
+    // both of which have validation.
     return Collections.unmodifiableList(shares);
   }
 
@@ -70,13 +81,18 @@ public class Portfolio {
     if (symbol == null || symbol.isBlank()) {
       throw new IllegalArgumentException("Symbol cannot be null or blank");
     }
+    // stream() converts the list into a stream so we can filter it.
+    // filter() keeps only the shares whose stock symbol matches the given symbol.
+    // equalsIgnoreCase() means "AAPL" and "aapl" are treated as the same.
+    // toList() collects the filtered results back into a new list.
     return shares.stream()
-        .filter(s -> s.getStock().getSymbol().equalsIgnoreCase(symbol))
-        .toList();
+            .filter(s -> s.getStock().getSymbol().equalsIgnoreCase(symbol))
+            .toList();
   }
 
   /**
    * Returns true if the portfolio contains the given share instance.
+   * Checks by object reference - the share must be the exact same object.
    *
    * @param share the share to look for
    * @return true if found
@@ -86,9 +102,11 @@ public class Portfolio {
     if (share == null) {
       throw new IllegalArgumentException("Share cannot be null");
     }
+    // List.contains() checks whether this exact Share object exists in the list
     return shares.contains(share);
   }
 
+  // Produces a readable summary of the portfolio and all shares inside it
   @Override
   public String toString() {
     return "Portfolio{shares=" + shares + '}';
