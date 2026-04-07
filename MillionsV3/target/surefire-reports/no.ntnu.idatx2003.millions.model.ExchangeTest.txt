@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: no.ntnu.idatx2003.millions.model.ExchangeTest
+-------------------------------------------------------------------------------
+Tests run: 20, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.025 s -- in no.ntnu.idatx2003.millions.model.ExchangeTest

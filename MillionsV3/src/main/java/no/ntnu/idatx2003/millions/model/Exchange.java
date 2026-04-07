@@ -10,6 +10,9 @@ import java.util.stream.Collectors;
 import no.ntnu.idatx2003.millions.model.transaction.Purchase;
 import no.ntnu.idatx2003.millions.model.transaction.Sale;
 import no.ntnu.idatx2003.millions.model.transaction.Transaction;
+import java.io.IOException;
+import java.util.ArrayList;
+import no.ntnu.idatx2003.millions.model.file.StockFileHandler;
 
 /**
  * Represents a stock exchange where players can buy and sell stocks.
@@ -226,5 +229,30 @@ public class Exchange {
       // making it the new current price
       stock.addNewSalesPrice(newPrice);
     });
+  }
+
+  /**
+   * Loads stocks from a file and adds them to this exchange.
+   *
+   * @param filePath    path to the file to load from
+   * @param fileHandler the file handler to use (e.g. CsvStockFileHandler)
+   * @throws IOException if the file cannot be read
+   */
+  public void loadStocksFromFile(String filePath, StockFileHandler fileHandler)
+          throws IOException {
+    List<Stock> loaded = fileHandler.readStocks(filePath);
+    loaded.forEach(s -> stockMap.put(s.getSymbol(), s));
+  }
+
+  /**
+   * Saves all currently listed stocks to a file.
+   *
+   * @param filePath    path to the file to save to
+   * @param fileHandler the file handler to use (e.g. CsvStockFileHandler)
+   * @throws IOException if the file cannot be written
+   */
+  public void saveStocksToFile(String filePath, StockFileHandler fileHandler)
+          throws IOException {
+    fileHandler.writeStocks(new ArrayList<>(stockMap.values()), filePath);
   }
 }

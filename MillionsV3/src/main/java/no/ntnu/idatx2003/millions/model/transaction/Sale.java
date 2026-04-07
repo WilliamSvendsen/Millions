@@ -66,9 +66,7 @@ public class Sale extends Transaction {
 
     // Step 3: Record this transaction in the player's archive.
     // 'this' refers to this Sale object itself - it archives itself.
-    player.getTransactionArchive().add(this);
-
-    // Mark as committed so this transaction cannot be executed again
     committed = true;
+    player.getTransactionArchive().add(this);
   }
 }

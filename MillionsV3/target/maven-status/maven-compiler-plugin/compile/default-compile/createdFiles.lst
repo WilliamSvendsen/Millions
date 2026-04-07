@@ -1,0 +1,14 @@
+no\ntnu\idatx2003\millions\model\file\StockFileHandler.class
+no\ntnu\idatx2003\millions\model\Stock.class
+no\ntnu\idatx2003\millions\model\Portfolio.class
+no\ntnu\idatx2003\millions\model\transaction\Transaction.class
+no\ntnu\idatx2003\millions\model\Player.class
+no\ntnu\idatx2003\millions\model\Share.class
+no\ntnu\idatx2003\millions\model\file\CsvStockFileHandler.class
+no\ntnu\idatx2003\millions\model\calculator\SaleCalculator.class
+no\ntnu\idatx2003\millions\model\transaction\TransactionArchive.class
+no\ntnu\idatx2003\millions\model\transaction\Sale.class
+no\ntnu\idatx2003\millions\model\calculator\TransactionCalculator.class
+no\ntnu\idatx2003\millions\model\transaction\Purchase.class
+no\ntnu\idatx2003\millions\model\Exchange.class
+no\ntnu\idatx2003\millions\model\calculator\PurchaseCalculator.class

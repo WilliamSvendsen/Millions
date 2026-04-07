@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: no.ntnu.idatx2003.millions.model.PlayerTest
+-------------------------------------------------------------------------------
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.010 s -- in no.ntnu.idatx2003.millions.model.PlayerTest
