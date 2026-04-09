@@ -2,6 +2,7 @@ package no.ntnu.idatx2003.millions.model;
 
 import java.math.BigDecimal;
 import no.ntnu.idatx2003.millions.model.transaction.TransactionArchive;
+import java.math.RoundingMode;
 
 /**
  * Represents a player in the Millions stock trading game.
@@ -135,6 +136,55 @@ public class Player {
    */
   public TransactionArchive getTransactionArchive() {
     return transactionArchive;
+  }
+
+  /**
+   * Represents the possible status levels a player can achieve.
+   * Based on how long they have traded and how much their net worth has grown.
+   */
+  public enum Status {
+    NOVICE, INVESTOR, SPECULATOR
+  }
+
+  /**
+   * Returns the player's current status based on trading history and net worth growth.
+   * Novice: starting level, no requirements.
+   * Investor: traded at least 10 weeks and grown net worth by at least 20%.
+   * Speculator: traded at least 20 weeks and at least doubled net worth.
+   *
+   * @return current Status level
+   */
+  public Status getStatus() {
+    // Count how many distinct weeks the player has traded in
+    int weeksTraded = transactionArchive.countDistinctWeeks();
+
+    // Calculate growth rate: how much net worth has changed relative to starting money
+    // e.g. if started with 1000 and now worth 1200, growth rate is 0.20 (20%)
+    BigDecimal growthRate = getNetWorth()
+            .subtract(startingMoney)
+            .divide(startingMoney, 4, RoundingMode.HALF_UP);
+
+    // Speculator requires 20+ weeks traded and net worth at least doubled (100% growth)
+    if (weeksTraded >= 20 && growthRate.compareTo(new BigDecimal("1.00")) >= 0) {
+      return Status.SPECULATOR;
+    }
+    // Investor requires 10+ weeks traded and at least 20% growth
+    if (weeksTraded >= 10 && growthRate.compareTo(new BigDecimal("0.20")) >= 0) {
+      return Status.INVESTOR;
+    }
+    // Default starting level
+    return Status.NOVICE;
+  }
+
+  /**
+   * Returns the player's total net worth.
+   * This is their current cash balance plus the current market value of their portfolio.
+   *
+   * @return total net worth
+   */
+  public BigDecimal getNetWorth() {
+    // Add current cash to the total value of all shares currently owned
+    return money.add(portfolio.getNetWorth());
   }
 
   // Produces a readable summary, e.g. "Player{name='Alice', money=9500.00}"

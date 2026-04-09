@@ -3,6 +3,7 @@ package no.ntnu.idatx2003.millions.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.math.BigDecimal;
 
 /**
  * Stores all shares currently owned by a player.
@@ -104,6 +105,19 @@ public class Portfolio {
     }
     // List.contains() checks whether this exact Share object exists in the list
     return shares.contains(share);
+  }
+  /**
+   * Returns the total current market value of all shares in the portfolio.
+   * Calculated by multiplying each share's current sales price by its quantity.
+   *
+   * @return total portfolio market value
+   */
+  public BigDecimal getNetWorth() {
+    // stream() through all shares, multiply each share's current price by quantity,
+    // then add all the results together starting from zero
+    return shares.stream()
+            .map(s -> s.getStock().getSalesPrice().multiply(s.getQuantity()))
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 
   // Produces a readable summary of the portfolio and all shares inside it

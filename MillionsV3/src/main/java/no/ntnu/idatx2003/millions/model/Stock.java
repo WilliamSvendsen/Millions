@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Collections;
 
 /**
  * Represents a stock listed on an exchange.
@@ -104,7 +105,54 @@ public class Stock {
     // since getSalesPrice() always reads the last entry
     prices.add(price);
   }
+  /**
+   * Returns a read-only view of all prices ever recorded for this stock.
+   *
+   * @return unmodifiable list of historical prices
+   */
+  public List<BigDecimal> getHistoricalPrices() {
+    // unmodifiableList() prevents the caller from adding or removing prices directly
+    return Collections.unmodifiableList(prices);
+  }
 
+  /**
+   * Returns the highest price ever recorded for this stock.
+   *
+   * @return highest historical price
+   */
+  public BigDecimal getHighestPrice() {
+    // stream() through all prices, max() finds the largest using compareTo
+    return prices.stream()
+            .max(BigDecimal::compareTo)
+            .orElseThrow();
+  }
+
+  /**
+   * Returns the lowest price ever recorded for this stock.
+   *
+   * @return lowest historical price
+   */
+  public BigDecimal getLowestPrice() {
+    // stream() through all prices, min() finds the smallest using compareTo
+    return prices.stream()
+            .min(BigDecimal::compareTo)
+            .orElseThrow();
+  }
+
+  /**
+   * Returns the difference between the most recent and previous price.
+   * Returns zero if only one price has been recorded.
+   *
+   * @return latest price change (positive = increase, negative = decrease)
+   */
+  public BigDecimal getLatestPriceChange() {
+    // If only one price exists, there is no change to report
+    if (prices.size() < 2) {
+      return BigDecimal.ZERO;
+    }
+    // Subtract the second-to-last price from the last price
+    return prices.get(prices.size() - 1).subtract(prices.get(prices.size() - 2));
+  }
   // equals() and hashCode() allow Java to correctly compare two Stock objects.
   // Two stocks are considered equal if they have the same symbol,
   // regardless of price or company name.

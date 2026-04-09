@@ -13,6 +13,7 @@ import no.ntnu.idatx2003.millions.model.transaction.Transaction;
 import java.io.IOException;
 import java.util.ArrayList;
 import no.ntnu.idatx2003.millions.model.file.StockFileHandler;
+import java.util.Comparator;
 
 /**
  * Represents a stock exchange where players can buy and sell stocks.
@@ -229,6 +230,38 @@ public class Exchange {
       // making it the new current price
       stock.addNewSalesPrice(newPrice);
     });
+  }
+
+  /**
+   * Returns the top stocks with the largest positive price change since last week.
+   *
+   * @param limit maximum number of stocks to return
+   * @return list of top gaining stocks, sorted by price change descending
+   */
+  public List<Stock> getGainers(int limit) {
+    // Filter to only stocks with a positive price change,
+    // sort by largest change first, then take only the top 'limit' results
+    return stockMap.values().stream()
+            .filter(s -> s.getLatestPriceChange().compareTo(BigDecimal.ZERO) > 0)
+            .sorted(Comparator.comparing(Stock::getLatestPriceChange).reversed())
+            .limit(limit)
+            .collect(Collectors.toList());
+  }
+
+  /**
+   * Returns the top stocks with the largest negative price change since last week.
+   *
+   * @param limit maximum number of stocks to return
+   * @return list of top losing stocks, sorted by price change ascending
+   */
+  public List<Stock> getLosers(int limit) {
+    // Filter to only stocks with a negative price change,
+    // sort by smallest change first (most negative), then take only the top 'limit' results
+    return stockMap.values().stream()
+            .filter(s -> s.getLatestPriceChange().compareTo(BigDecimal.ZERO) < 0)
+            .sorted(Comparator.comparing(Stock::getLatestPriceChange))
+            .limit(limit)
+            .collect(Collectors.toList());
   }
 
   /**
