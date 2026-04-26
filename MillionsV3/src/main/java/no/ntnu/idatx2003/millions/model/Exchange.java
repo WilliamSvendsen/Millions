@@ -14,6 +14,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import no.ntnu.idatx2003.millions.model.file.StockFileHandler;
 import java.util.Comparator;
+import no.ntnu.idatx2003.millions.model.transaction.TransactionFactory;
+import no.ntnu.idatx2003.millions.observer.Observable;
+import no.ntnu.idatx2003.millions.observer.Observer;
+import java.util.HashSet;
+import java.util.Set;
+import no.ntnu.idatx2003.millions.model.event.RandomEventService;
 
 /**
  * Represents a stock exchange where players can buy and sell stocks.
@@ -23,7 +29,10 @@ import java.util.Comparator;
  * with a small random change. Mever more than 5% up or down from the previous price.</p>
  */
 
-public class Exchange {
+public class Exchange implements Observable {
+
+  // The set of observers to notify when the exchange state changes
+  private final Set<Observer> observers;
 
   // The maximum price change allowed per week, expressed as a fraction.
   // 0.05 means prices can move at most +-5% each week.
@@ -45,6 +54,12 @@ public class Exchange {
   // The current trading week number, starts at 1 and increments with each advance()
   private int week;
 
+  // Factory used to create purchase and sale transactions
+  private final TransactionFactory transactionFactory;
+
+  // Service that generates random market events each week
+  private final RandomEventService eventService;
+
   /**
    * Creates a new Exchange with the given name and initial list of stocks.
    *
@@ -65,6 +80,9 @@ public class Exchange {
     // using the stock's symbol as the key for fast lookup later
     stocks.forEach(s -> stockMap.put(s.getSymbol(), s));
     this.random = new Random();
+    this.transactionFactory = new TransactionFactory();
+    this.observers = new HashSet<>();
+    this.eventService = new RandomEventService();
     // Trading always starts at week 1
     this.week = 1;
   }
@@ -156,6 +174,7 @@ public class Exchange {
   public Transaction buy(String symbol, BigDecimal quantity, Player player) {
     if (quantity == null || quantity.compareTo(BigDecimal.ZERO) <= 0) {
       throw new IllegalArgumentException("Quantity must be positive");
+
     }
     // Look up the stock - throws if symbol not found
     Stock stock = getStock(symbol);
@@ -165,10 +184,12 @@ public class Exchange {
     Share share = new Share(stock, quantity, stock.getSalesPrice());
 
     // Wrap the share in a Purchase transaction for the current week
-    Purchase purchase = new Purchase(share, week);
+    Purchase purchase = transactionFactory.createPurchase(share, week);
 
     // commit() validates funds, deducts cost, adds share to portfolio, archives transaction
     purchase.commit(player);
+
+    notifyObservers();
 
     // Return the completed transaction so the caller has a reference if needed
     return purchase;
@@ -189,47 +210,44 @@ public class Exchange {
       throw new IllegalArgumentException("Share cannot be null");
     }
     // Wrap the share in a Sale transaction for the current week
-    Sale sale = new Sale(share, week);
+    Sale sale = transactionFactory.createSale(share, week);
 
     // commit() validates ownership, adds proceeds, removes share from portfolio, archives
     sale.commit(player);
+
+    notifyObservers();
 
     return sale;
   }
 
   /**
    * Advances the exchange to the next trading week.
-   * Increments the week counter and pushes a new randomly adjusted price
-   * (within +-5%) onto every listed stock's price history.
+   * Increments the week counter, updates prices, and processes random events.
+   * Returns a list of event messages that occurred this week.
+   *
+   * @return list of random event messages (may be empty)
    */
-  public void advance() {
-    // Move to the next week
+  public List<String> advance() {
     week++;
 
-    // Update the price of every stock in the exchange
+    // Update all stock prices with normal random fluctuation
     stockMap.values().forEach(stock -> {
-      // random.nextDouble() produces a number between 0.0 and 1.0.
-      // Multiplying by 2 and subtracting 1 shifts the range to -1.0 to +1.0.
-      // Multiplying by MAX_WEEKLY_CHANGE (0.05) scales it to -0.05 to +0.05,
-      // meaning a maximum price change of +-5%.
       double changePercent = (random.nextDouble() * 2 - 1) * MAX_WEEKLY_CHANGE.doubleValue();
-
-      // Adding 1 turns the change into a multiplier.
-      // e.g. -0.03 becomes 0.97 (a 3% drop), +0.02 becomes 1.02 (a 2% rise).
       BigDecimal multiplier = BigDecimal.ONE.add(
               new BigDecimal(changePercent).setScale(6, RoundingMode.HALF_UP));
-
-      // Apply the multiplier to the current price, round to 2 decimal places,
-      // and ensure the price never drops below 0.01 (a stock cant be worth nothing)
       BigDecimal newPrice = stock.getSalesPrice()
               .multiply(multiplier)
               .setScale(2, RoundingMode.HALF_UP)
               .max(new BigDecimal("0.01"));
-
-      // Push the new price onto the stock's price history list,
-      // making it the new current price
       stock.addNewSalesPrice(newPrice);
     });
+
+    // Process random events on top of normal price changes
+    List<String> events = eventService.processEvents(
+            new ArrayList<>(stockMap.values()));
+
+    notifyObservers();
+    return events;
   }
 
   /**
@@ -262,6 +280,29 @@ public class Exchange {
             .sorted(Comparator.comparing(Stock::getLatestPriceChange))
             .limit(limit)
             .collect(Collectors.toList());
+  }
+  @Override
+  public void addObserver(Observer observer) {
+    observers.add(observer);
+  }
+
+  @Override
+  public void removeObserver(Observer observer) {
+    observers.remove(observer);
+  }
+
+  @Override
+  public void notifyObservers() {
+    // Call update() on every registered observer
+    observers.forEach(Observer::update);
+  }
+
+  /**
+   * Increments the week counter without updating prices or notifying observers.
+   * Used only when restoring a saved game state.
+   */
+  public void advanceWeekCounter() {
+    week++;
   }
 
   /**

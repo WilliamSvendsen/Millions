@@ -1,4 +1,10 @@
+no\ntnu\idatx2003\millions\model\transaction\SaleTest.class
 no\ntnu\idatx2003\millions\model\ExchangeTest.class
 no\ntnu\idatx2003\millions\model\StockTest.class
-no\ntnu\idatx2003\millions\model\calculator\CalculatorTest.class
 no\ntnu\idatx2003\millions\model\PlayerTest.class
+no\ntnu\idatx2003\millions\model\transaction\PurchaseTest.class
+no\ntnu\idatx2003\millions\model\PortfolioTest.class
+no\ntnu\idatx2003\millions\model\file\CsvStockFileHandlerTest.class
+no\ntnu\idatx2003\millions\model\save\GameSaveServiceTest.class
+no\ntnu\idatx2003\millions\model\transaction\TransactionArchiveTest.class
+no\ntnu\idatx2003\millions\model\calculator\CalculatorTest.class
