@@ -281,16 +281,29 @@ public class Exchange implements Observable {
             .limit(limit)
             .collect(Collectors.toList());
   }
+  /**
+   * Registers an observer to be notified when the exchange state changes.
+   *
+   * @param observer the observer to register
+   */
   @Override
   public void addObserver(Observer observer) {
     observers.add(observer);
   }
 
+  /**
+   * Removes a previously registered observer.
+   *
+   * @param observer the observer to remove
+   */
   @Override
   public void removeObserver(Observer observer) {
     observers.remove(observer);
   }
 
+  /**
+   * Notifies all registered observers that the state has changed.
+   */
   @Override
   public void notifyObservers() {
     // Call update() on every registered observer
