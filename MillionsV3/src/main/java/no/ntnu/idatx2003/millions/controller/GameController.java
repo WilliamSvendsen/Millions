@@ -7,7 +7,6 @@ import java.util.List;
 import no.ntnu.idatx2003.millions.model.Exchange;
 import no.ntnu.idatx2003.millions.model.Player;
 import no.ntnu.idatx2003.millions.model.Share;
-import no.ntnu.idatx2003.millions.model.Stock;
 import no.ntnu.idatx2003.millions.model.file.CsvStockFileHandler;
 import no.ntnu.idatx2003.millions.model.file.StockFileHandler;
 import no.ntnu.idatx2003.millions.model.save.GameSaveService;
@@ -62,6 +61,8 @@ public class GameController {
      * @param symbol   the stock symbol to buy
      * @param quantity the number of units to buy
      * @return the completed transaction
+     * @throws IllegalArgumentException if symbol is invalid, such as letters and non-positive numbers.
+     * @throws IllegalStateException if the player doesn't have enough funds
      */
     public no.ntnu.idatx2003.millions.model.transaction.Transaction buyStock(
             String symbol, BigDecimal quantity) {
@@ -73,6 +74,7 @@ public class GameController {
      *
      * @param share the share to sell
      * @return the completed transaction
+     * @throws IllegalStateException if the player own the share
      */
     public no.ntnu.idatx2003.millions.model.transaction.Transaction sellShare(Share share) {
         return exchange.sell(share, player);
@@ -114,14 +116,6 @@ public class GameController {
         return player;
     }
 
-    /**
-     * Returns true if a game is currently active.
-     *
-     * @return true if game is running
-     */
-    public boolean isGameActive() {
-        return exchange != null && player != null;
-    }
     /**
      * Saves the current game state to a JSON file.
      *

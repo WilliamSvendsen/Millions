@@ -26,7 +26,7 @@ import no.ntnu.idatx2003.millions.model.event.RandomEventService;
  *
  * <p>The exchange keeps track of all listed stocks and the current trading week.
  * Each time the market advances to a new week, every stock's price is updated
- * with a small random change. Mever more than 5% up or down from the previous price.</p>
+ * with a small random change. Never more than 5% up or down from the previous price.</p>
  */
 
 public class Exchange implements Observable {
