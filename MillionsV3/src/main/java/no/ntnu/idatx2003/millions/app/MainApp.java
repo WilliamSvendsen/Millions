@@ -23,7 +23,7 @@ public class MainApp extends Application {
     }
 
     /**
-     * Main method - launches the JavaFX application.
+     * Main method, launches the JavaFX application.
      *
      * @param args command line arguments (not used)
      */

@@ -8,7 +8,7 @@ import no.ntnu.idatx2003.millions.model.Stock;
  * Interface for reading and writing stock data to and from files.
  *
  * <p>Implementing this interface for each file format (e.g. CSV, JSON)
- * means Exchange never needs to change when new formats are added —
+ * means Exchange never needs to change when new formats are added
  * it always works through this common contract.</p>
  */
 public interface StockFileHandler {

@@ -321,7 +321,7 @@ public class Exchange implements Observable {
   /**
    * Loads stocks from a file and adds them to this exchange.
    *
-   * @param filePath    path to the file to load from
+   * @param filePath path to the file to load from
    * @param fileHandler the file handler to use (e.g. CsvStockFileHandler)
    * @throws IOException if the file cannot be read
    */
@@ -334,8 +334,8 @@ public class Exchange implements Observable {
   /**
    * Saves all currently listed stocks to a file.
    *
-   * @param filePath    path to the file to save to
-   * @param fileHandler the file handler to use (e.g. CsvStockFileHandler)
+   * @param filePath path to the file to save to
+   * @param fileHandler the file handler to use (for example CsvStockFileHandler)
    * @throws IOException if the file cannot be written
    */
   public void saveStocksToFile(String filePath, StockFileHandler fileHandler)

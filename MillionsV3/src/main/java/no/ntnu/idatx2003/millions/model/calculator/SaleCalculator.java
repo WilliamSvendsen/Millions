@@ -56,14 +56,14 @@ public class SaleCalculator implements TransactionCalculator {
   }
 
   // Gross = current sales price x quantity
-  // e.g. selling 10 units at the current price of 200.00 = 2000.00
+  // for example: selling 10 units at the current price of 200.00 = 2000.00
   @Override
   public BigDecimal calculateGross() {
     return salesPrice.multiply(quantity).setScale(SCALE, RoundingMode.HALF_UP);
   }
 
   // Commission = 1% of gross
-  // e.g. 1% of 2000.00 = 20.00
+  // for example: 1% of 2000.00 = 20.00
   @Override
   public BigDecimal calculateCommission() {
     return calculateGross().multiply(COMMISSION_RATE).setScale(SCALE, RoundingMode.HALF_UP);
@@ -71,7 +71,7 @@ public class SaleCalculator implements TransactionCalculator {
 
   // Tax = 30% of profit, but only if a profit was actually made.
   // Profit = gross - commission - what was originally paid for the shares.
-  // If sold at a loss or break-even, tax is 0.
+  // If sold at a loss or break even, tax is 0.
   @Override
   public BigDecimal calculateTax() {
     // What the player originally paid for these shares in total

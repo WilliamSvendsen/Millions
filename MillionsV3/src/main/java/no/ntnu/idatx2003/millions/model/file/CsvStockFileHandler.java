@@ -73,7 +73,7 @@ public class CsvStockFileHandler implements StockFileHandler {
      * Writes stocks to a CSV file at the given path.
      * Overwrites the file if it already exists.
      *
-     * @param stocks   the stocks to write
+     * @param stocks the stocks to write
      * @param filePath path to the CSV file to write to
      * @throws IOException if the file cannot be written
      */

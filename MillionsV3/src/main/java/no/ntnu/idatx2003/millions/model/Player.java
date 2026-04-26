@@ -106,7 +106,7 @@ public class Player {
    *
    * @param amount the amount to deduct (must be positive and not exceed balance)
    * @throws IllegalArgumentException if amount is null or not positive
-   * @throws IllegalStateException    if the player has insufficient funds
+   * @throws IllegalStateException if the player has insufficient funds
    */
   public void withdrawMoney(BigDecimal amount) {
     if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
@@ -159,7 +159,7 @@ public class Player {
     int weeksTraded = transactionArchive.countDistinctWeeks();
 
     // Calculate growth rate: how much net worth has changed relative to starting money
-    // e.g. if started with 1000 and now worth 1200, growth rate is 0.20 (20%)
+    // for example if started with 1000 and now worth 1200, growth rate is 0.20 (20%)
     BigDecimal growthRate = getNetWorth()
             .subtract(startingMoney)
             .divide(startingMoney, 4, RoundingMode.HALF_UP);
@@ -187,7 +187,7 @@ public class Player {
     return money.add(portfolio.getNetWorth());
   }
 
-  // Produces a readable summary, e.g. "Player{name='Alice', money=9500.00}"
+  // Produces a readable summary, for example "Player{name='Alice', money=9500.00}"
   @Override
   public String toString() {
     return "Player{name='" + name + "', money=" + money + '}';

@@ -23,7 +23,7 @@ public class TransactionArchive {
 
   /**
    * Adds a committed transaction to the archive.
-   * Only committed transactions are accepted - this prevents incomplete
+   * Only committed transactions are accepted this prevents incomplete
    * transactions from being recorded as if they happened.
    *
    * @param transaction the transaction to store
@@ -85,7 +85,7 @@ public class TransactionArchive {
   }
 
   /**
-   * Returns a read-only view of all transactions.
+   * Returns a read only view of all transactions.
    * The caller can iterate and read, but cannot add or remove entries.
    *
    * @return unmodifiable list of all transactions

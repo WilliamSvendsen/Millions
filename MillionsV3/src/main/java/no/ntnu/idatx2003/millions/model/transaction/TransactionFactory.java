@@ -15,7 +15,7 @@ public class TransactionFactory {
      * Creates a new Purchase transaction for the given share and week.
      *
      * @param share the share being purchased
-     * @param week  the current trading week
+     * @param week the current trading week
      * @return a new uncommitted Purchase transaction
      */
     public Purchase createPurchase(Share share, int week) {
@@ -26,7 +26,7 @@ public class TransactionFactory {
      * Creates a new Sale transaction for the given share and week.
      *
      * @param share the share being sold
-     * @param week  the current trading week
+     * @param week the current trading week
      * @return a new uncommitted Sale transaction
      */
     public Sale createSale(Share share, int week) {

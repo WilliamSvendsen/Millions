@@ -35,8 +35,8 @@ public abstract class Transaction {
    * This constructor is protected, it can only be called by subclasses
    * via super(), never directly from outside.
    *
-   * @param share      the share involved in this transaction
-   * @param week       the trading week number
+   * @param share the share involved in this transaction
+   * @param week the trading week number
    * @param calculator the calculator used to compute values
    * @throws IllegalArgumentException if share or calculator is null, or week is non-positive
    */

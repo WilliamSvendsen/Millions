@@ -12,7 +12,7 @@ import java.math.BigDecimal;
  */
 public class Share {
 
-  // The stock this share belongs to, e.g. the Apple stock object
+  // The stock this share belongs to, for example, the Apple stock object
   private final Stock stock;
 
   // How many units of the stock were purchased in this transaction.
@@ -29,8 +29,8 @@ public class Share {
   /**
    * Creates a new Share.
    *
-   * @param stock         the stock this share represents
-   * @param quantity      number of units purchased (must be positive)
+   * @param stock the stock this share represents
+   * @param quantity number of units purchased (must be positive)
    * @param purchasePrice price per unit at the time of purchase (must be non-negative)
    * @throws IllegalArgumentException if any argument is invalid
    */
@@ -44,7 +44,7 @@ public class Share {
     if (quantity == null || quantity.compareTo(BigDecimal.ZERO) <= 0) {
       throw new IllegalArgumentException("Quantity must be positive");
     }
-    // Purchase price can be zero (e.g. a free stock) but never negative
+    // Purchase price can be zero (for example a free stock) but never negative
     if (purchasePrice == null || purchasePrice.compareTo(BigDecimal.ZERO) < 0) {
       throw new IllegalArgumentException("Purchase price cannot be null or negative");
     }
@@ -81,7 +81,7 @@ public class Share {
     return purchasePrice;
   }
 
-  // Produces a readable summary of this share, e.g.
+  // Produces a readable summary of this share, for example
   // "Share{stock=AAPL, quantity=10, purchasePrice=150.00}"
   @Override
   public String toString() {

@@ -9,17 +9,17 @@ import java.util.Collections;
 /**
  * Represents a stock listed on an exchange.
  *
- * <p>A stock has a unique ticker symbol (e.g. "AAPL"), a company name,
+ * <p>A stock has a unique ticker symbol (for example "AAPL"), a company name,
  * and a list of prices. A new price is appended each week when the market
  * advances. The current sales price is always the most recently added price.</p>
  */
 public class Stock {
 
-  // The unique ticker symbol for this stock, e.g. "AAPL" for Apple.
+  // The unique ticker symbol for this stock, for example "AAPL" for Apple.
   // final means this can never be changed after the object is created.
   private final String symbol;
 
-  // The full name of the company, e.g. "Apple Inc."
+  // The full name of the company, for example "Apple Inc."
   private final String company;
 
   // A list storing every price this stock has ever had, in order.
@@ -31,8 +31,8 @@ public class Stock {
   /**
    * Creates a new Stock with an initial sales price.
    *
-   * @param symbol     unique ticker symbol, e.g. "AAPL"
-   * @param company    full company name
+   * @param symbol unique ticker symbol, for example "AAPL"
+   * @param company full company name
    * @param salesPrice initial price (must be non-negative)
    * @throws IllegalArgumentException if symbol or company is blank, or price is negative
    */
@@ -93,7 +93,7 @@ public class Stock {
    * Adds a new sales price to the price history.
    * Called each week by Exchange when prices are updated.
    *
-   * @param price new price (must be non-negative)
+   * @param price new price (cannot be negative)
    * @throws IllegalArgumentException if price is null or negative
    */
   public void addNewSalesPrice(BigDecimal price) {
@@ -178,7 +178,7 @@ public class Stock {
   }
 
   // toString() produces a human-readable description of this stock,
-  // e.g. "AAPL - Apple Inc. (150.00)"
+  // for example "AAPL - Apple Inc. (150.00)"
   @Override
   public String toString() {
     return symbol + " - " + company + " (" + getSalesPrice() + ")";

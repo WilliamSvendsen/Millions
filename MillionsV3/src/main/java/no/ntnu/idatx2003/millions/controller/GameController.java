@@ -14,7 +14,7 @@ import no.ntnu.idatx2003.millions.model.save.GameState;
 
 /**
  * Controller for the Millions game.
- * Sits between the view and the model - handles all game actions
+ * Sits between the view and the model, handles all game actions
  * triggered by the user through the GUI.
  */
 public class GameController {
@@ -42,9 +42,9 @@ public class GameController {
     /**
      * Starts a new game by creating a player and loading stocks from a file.
      *
-     * @param playerName    the name of the player
+     * @param playerName the name of the player
      * @param startingMoney the player's starting capital
-     * @param filePath      path to the CSV file containing stock data
+     * @param filePath path to the CSV file containing stock data
      * @throws IOException if the file cannot be read
      * @throws IllegalArgumentException if any argument is invalid
      */

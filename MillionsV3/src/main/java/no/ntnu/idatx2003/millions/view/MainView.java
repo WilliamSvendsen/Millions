@@ -60,7 +60,7 @@ public class MainView implements Observer {
     /**
      * Creates a new MainView.
      *
-     * @param stage      the primary stage
+     * @param stage the primary stage
      * @param controller the game controller
      */
     public MainView(Stage stage, GameController controller) {
